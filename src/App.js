@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 
 function App() {
-  const [id, setId] = useState(1);
+  //const [id, setId] = useState(1);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [isDone, setIsDone] = useState();
@@ -24,19 +24,30 @@ function App() {
   }
 
   function ClickToChange() {
+    //console.log('id', id);
+    //setId(id + 1);
     setTodos([
       ...todos,
       { id: todos.length + 1, title: title, content: content, isDone: false },
     ]);
     setTitle("");
     setContent("");
-    setId(id + 1);
-    console.log(isDone);
   }
-  function DoneHandler() {
-    setIsDone(true);
-    console.log(isDone, id);
+  function DoneHandler(id) {
+    let newTodo = todos.map((data) => {
+      if (data.id === id) {
+        data.isDone = !data.isDone;
+      }
+      return data;
+    });
+    setTodos(newTodo);
   }
+
+  function DeleteHandler(id) {
+    let newTodo = todos.filter((todo) => todo.id !== id);
+    setTodos(newTodo);
+  }
+
   return (
     <div>
       <div className="header">
@@ -77,8 +88,20 @@ function App() {
                   <div className="todo" key={todo.id}>
                     <h3>{todo.title}</h3>
                     <p>{todo.content}</p>
-                    <button>삭제하기</button>
-                    <button onClick={DoneHandler}>완료</button>
+                    <button
+                      onClick={() => {
+                        DeleteHandler(todo.id);
+                      }}
+                    >
+                      삭제하기
+                    </button>
+                    <button
+                      onClick={() => {
+                        DoneHandler(todo.id);
+                      }}
+                    >
+                      완료
+                    </button>
                   </div>
                 );
               } else {
@@ -97,8 +120,20 @@ function App() {
                   <div className="todo" key={todo.id}>
                     <h3>{todo.title}</h3>
                     <p>{todo.content}</p>
-                    <button>삭제하기</button>
-                    <button>취소</button>
+                    <button
+                      onClick={() => {
+                        DeleteHandler(todo.id);
+                      }}
+                    >
+                      삭제하기
+                    </button>
+                    <button
+                      onClick={() => {
+                        DoneHandler(todo.id);
+                      }}
+                    >
+                      취소
+                    </button>
                   </div>
                 );
               } else {
